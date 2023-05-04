@@ -1,6 +1,13 @@
-require("@nomicfoundation/hardhat-toolbox");
+require("dotenv").config();
 
-/** @type import('hardhat/config').HardhatUserConfig */
+require("@nomiclabs/hardhat-waffle");
+
 module.exports = {
   solidity: "0.8.18",
+  networks: {
+    sepolia: {
+      url: process.env.url,
+      accounts: [process.env.key]
+    }
+  }
 };
