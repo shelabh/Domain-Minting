@@ -78,7 +78,7 @@ contract Domains is ERC721URIStorage {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
-    string[3] public tld;
+    string[1] public tld;
 
     // We'll be storing our NFT images on chain as SVGs
     string svgPartOne =
@@ -92,7 +92,7 @@ contract Domains is ERC721URIStorage {
 
 
 
-    constructor(string[3] memory _tld)
+    constructor(string[1] memory _tld)
         payable
         ERC721("SoloDraft", "SD")
     {

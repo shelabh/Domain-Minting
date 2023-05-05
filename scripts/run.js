@@ -1,7 +1,9 @@
+const hre = require("hardhat");
+
 const main = async () => {
 	const domainContractFactory = await hre.ethers.getContractFactory("Domains");
 	// We pass in "lagos" to the constructor when deploying
-	const domainContract = await domainContractFactory.deploy(["lagos", "abuja", "uyo"]);
+	const domainContract = await domainContractFactory.deploy(["lagos"]);
 	await domainContract.deployed();
       
 	console.log("Contract deployed to:", domainContract.address);

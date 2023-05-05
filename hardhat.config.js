@@ -1,6 +1,8 @@
 require("dotenv").config();
 
-require("@nomiclabs/hardhat-waffle");
+import"@nomiclabs/hardhat-waffle";
+import"@nomiclabs/hardhat-etherscan";
+import "@nomicfoundation/hardhat-verify";
 
 module.exports = {
   solidity: "0.8.18",
@@ -9,5 +11,8 @@ module.exports = {
       url: process.env.url,
       accounts: [process.env.key]
     }
+  },
+  etherscan: {
+    apiKey: process.env.apiKey
   }
 };
