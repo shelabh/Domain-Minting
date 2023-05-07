@@ -1,8 +1,13 @@
 import router from "next/router";
+import { useEffect } from "react"
 
-
+const OPENSEA_LINK = '';
+const TOTAL_MINT_COUNT = 50;
 
 const Landing = () => {
+
+	
+	
 	return (
 		<>
 			<div className="flex flex-col    h-screen  ">

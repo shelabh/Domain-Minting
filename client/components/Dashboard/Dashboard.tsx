@@ -1,42 +1,20 @@
-import { GetSessionParams, getSession, useSession, signOut } from "next-auth/react";
+import { useContext } from "react";
+import { AppContext } from "../../context/AppContext";
 
 
 const Dashboard = () => {
-	const {data: session} = useSession()
-	const handleSignOut = () => {
-		signOut({callbackUrl: '/'})
-	}
-	
+	const { currentAccount } = useContext(AppContext);
+
 	return (
 		<>
-			<div>
-				<h4>User session:</h4>
-				{session && 
-					<div>{session?.user?.name}</div>
-				}	
-				<button onClick={() => handleSignOut()}>Sign out</button>
+			<div className="h-screen flex flex-col justify-center items-center">
+				<h4>User address:</h4>
+				<div>{currentAccount}</div>
 			</div>
 		</>
 	)
 }
 
 
-export async function getServerSideProps(context: GetSessionParams ) {
-	const session = await getSession(context);
-      
-	// redirect if not authenticated
-	if (!session) {
-	  return {
-	    redirect: {
-	      destination: "/",
-	      permanent: false,
-	    },
-	  };
-	}
-      
-	return {
-	  props: { user: session.user },
-	};
-      }
 
 export default Dashboard;
