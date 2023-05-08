@@ -8,11 +8,11 @@ import AppProvider from "../context/AppContext";
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const showNavbar = router.pathname 
-  const noNav = ['/app/signin', '/app/signup']
+  const noNav = ['/app/admin/dashboard']
   return (
     <AppProvider>
       <Head>
-        <title>Mienai</title>
+        <title>SoloDraft</title>
         <meta name="description" content="Solodraft" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />

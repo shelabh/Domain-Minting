@@ -78,7 +78,7 @@ contract Domains is ERC721URIStorage {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
-    string[1] public tld;
+    string public tld;
 
     // We'll be storing our NFT images on chain as SVGs
     string svgPartOne =
@@ -87,49 +87,50 @@ contract Domains is ERC721URIStorage {
 
     mapping(string => address) public domains;
     mapping(string => string) public records;
+    mapping(uint => string) public names;
 
     address payable public owner;
 
 
 
-    constructor(string[1] memory _tld)
+    constructor(string memory _tld)
         payable
         ERC721("SoloDraft", "SD")
     {
         // for (int i = 0; i < 3; i++) {
             owner = payable(msg.sender);
             tld = _tld;
-            for (uint i = 0; i < tld.length; i++) { 
-                console.log("%s name service deployed", _tld[i]); 
-            }
+            // for (uint i = 0; i < tld.length; i++) { 
+                console.log("%s name service deployed", _tld); 
+            // }
         
         // } 
     }
 
-    function register(string[1] calldata name) public payable {
-        for (uint i = 0; i < name.length; i++) {
-            require(domains[name[i]] == address(0));
+    function register(string calldata name) public payable {
+        // for (uint i = 0; i < name.length; i++) {
+            require(domains[name] == address(0));
 
             uint256 _price = price(name);
             require(msg.value >= _price, "Not enough ETH paid");
 
             // Combine the name[i] passed into the function  with the TLD
-            for (uint8 j = 0; j < tld.length; j++) {
-                string memory _name = string(abi.encodePacked(name[i], ".", tld[j]));
+            // for (uint8 j = 0; j < tld.length; j++) {
+                string memory _name = string(abi.encodePacked(name, ".", tld));
                 // Create the SVG (image) for the NFT with the name[i]
                 string memory finalSvg = string(
                     abi.encodePacked(svgPartOne, _name, svgPartTwo)
                 );
             
                 uint256 newRecordId = _tokenIds.current();
-                uint256 length = StringUtils.strlen(name[i]);
+                uint256 length = StringUtils.strlen(name);
                 string memory strLen = Strings.toString(length);
 
                 
                 console.log(
                     "Registering %s.%s on the contract with tokenID %d",
-                    name[i],
-                    tld[j],
+                    name,
+                    tld,
                     newRecordId
                 );
                 
@@ -161,17 +162,17 @@ contract Domains is ERC721URIStorage {
 
                 _safeMint(msg.sender, newRecordId);
                 _setTokenURI(newRecordId, finalTokenUri);
-                domains[name[i]] = msg.sender;
+                domains[name] = msg.sender;
 
                 _tokenIds.increment();
-            }
-        }
+            // }
+        // }
     }
 
     // This function will give us the price of a domain based on length
-    function price(string[1] calldata name) public pure returns (uint256) {
-        for (uint i = 0; i < name.length; i++) {
-            uint256 len = StringUtils.strlen(name[i]);
+    function price(string calldata name) public pure returns (uint256) {
+        
+            uint256 len = StringUtils.strlen(name);
             require(len > 0);
             if (len == 3) {
                 return 5 * 10**17; // 5 ETH = 5 000 000 000 000 000 000 (18 decimals). We're going with 0.5 ETH cause the faucets don't give a lot
@@ -180,34 +181,47 @@ contract Domains is ERC721URIStorage {
             } else {
                 return 1 * 10**17;
             }
-        }
+        
     }
 
     // Other functions unchanged
 
-    function getAddress(string[1] calldata name) public view returns (address) {
+    function getAddress(string calldata name) public view returns (address) {
         // Check that the owner is the transaction sender
-        for(uint i = 0; i < name.length; i++) {
-            return domains[name[i]];
-        }
+        
+            return domains[name];
+        
     }
 
-    function setRecord(string[1] calldata name, string calldata record) public {
+    function setRecord(string calldata name, string calldata record) public {
         // Check that the owner is the transaction sender
-        for(uint i = 0; i < name.length; i++) {
-            require(domains[name[i]] == msg.sender);
-            records[name[i]] = record;
-        }
+        
+            require(domains[name] == msg.sender);
+            records[name] = record;
+      
     }
 
-    function getRecord(string[1] calldata name)
+    function getRecord(string calldata name)
         public
         view
         returns (string memory)
     {
-        for(uint i = 0; i < name.length; i++) {
-            return records[name[i]];
+        
+            return records[name];
+        
+    }
+
+    function getAllNames() public view returns(string[] memory) {
+
+        console.log("Getting all names from contract");
+        string[] memory allNames = new string[](_tokenIds.current());
+
+        for(uint i = 0; i < _tokenIds.current(); i++) {
+            allNames[i] = names[i];
+            console.log("Name for token %d is %s", i, allNames[i]);
         }
+
+        return allNames;
     }
 
     modifier onlyOwner() {

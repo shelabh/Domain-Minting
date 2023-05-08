@@ -10,10 +10,10 @@ const networks = {
 	"0x89": "Polygon Mainnet",
 	"0x13881": "Polygon Mumbai Testnet",
 	"0xa86a": "AVAX Mainnet",
-      };
+};
       
-      // Add index signature to the networks object
-      const networksWithIndexSignature = networks;
-      networksWithIndexSignature['[key: string]'] = '';
+// Add index signature to the networks object
+const networksWithIndexSignature = networks;
+networksWithIndexSignature['[key: string]'] = '';
       
-      export { networksWithIndexSignature as networks };
+export { networksWithIndexSignature as networks };

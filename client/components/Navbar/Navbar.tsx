@@ -38,8 +38,8 @@ const Navbar = () => {
 				</div>
 			</div>
 			{currentAccount ?  
-				<div onClick={() => {router.push('/app/dashboard')}}   className="border-2 truncate cursor-pointer rounded-lg w-36 md:flex hidden flex-row   ">
-					{currentAccount}
+				<div onClick={() => {router.push('/app/admin/dashboard')}}   className="border-2 cursor-pointer rounded-lg w-36 md:flex hidden flex-row items-center justify-center pt-1.5 pb-1.5">
+					Dashboard
 				</div>
 				:
 				<div onClick={connectWallet}   className="border-2 cursor-pointer rounded-lg w-36 md:flex hidden flex-row items-center justify-center pt-1.5 pb-1.5">
