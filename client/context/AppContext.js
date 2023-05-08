@@ -180,6 +180,9 @@ const AppProvider = ({ children }) => {
 		}
 	}
 	const renderMints = () => {
+		// setTimeout(() => {
+		// 	fetchMints()
+		// }, 2000)
 		const contractAddress = "0x807693170612eB7C37b9A5A543eA1f4865a6F259"
 			return (
 				<div className='flex flex-col justify-between gap-10'>
@@ -192,7 +195,7 @@ const AppProvider = ({ children }) => {
 								return (
 									<div className='mint-item' key={index}>
 										<div className='mint-row'>
-											<a className='link' href={`https://testnets.opensea.io/assets/mumbai/${contractAddress}/${mint.id}`} target="_blank" rel="noopener noreferrer">
+											<a className='link' href={`https://sepolia.etherscan.io/address/${contractAddress}/${mint.id}`} target="_blank" rel="noopener noreferrer">
 												<p className='underlined'>{' '}{mint.name}{TOP_LEVEL_DOMAIN}{' '}</p>
 											</a>
 											{/* If mint.owner is currentAccount, add an edit button */}
