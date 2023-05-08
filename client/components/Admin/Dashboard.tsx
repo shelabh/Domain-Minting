@@ -5,7 +5,7 @@ import router from "next/router";
 const TOP_LEVEL_DOMAIN = '.lagos'
 
 const Dashboard = () => {
-	const { currentAccount, network, switchNetwork, domain, setDomain, mintDomain, mints, renderMints} = useContext(AppContext);
+	const { currentAccount, domain, setDomain, mintDomain, mints, renderMints} = useContext(AppContext);
 	
 	const [loading, setLoading] = useState(false)
 	const [selected, setSelected] = useState(1);
@@ -38,6 +38,46 @@ const Dashboard = () => {
 			</div>
 		)
 	}
+	// const renderMints = () => {
+	// 	setTimeout(() => {
+	// 		fetchMints()
+	// 	}, 2000)
+	// 	const contractAddress = "0x807693170612eB7C37b9A5A543eA1f4865a6F259"
+	// 		return (
+	// 			<div className='flex flex-col justify-between gap-10'>
+	// 				<p className='text-4xl font-bold'>
+	// 					Recently minted domains
+	// 				</p>
+	// 				{currentAccount && mints.length > 0 ?
+	// 				<div className=''>
+	// 					{mints.map((mint: any, index: any) => {
+	// 						return (
+	// 							<div className='mint-item' key={index}>
+	// 								<div className='border text-white'>
+	// 									<a className='link' href={`https://sepolia.etherscan.io/address/${contractAddress}/${mint.id}`} target="_blank" rel="noopener noreferrer">
+	// 										<p className='underlined'>{' '}{mint.name}{TOP_LEVEL_DOMAIN}{' '}</p>
+	// 									</a>
+	// 									{/* If mint.owner is currentAccount, add an edit button
+	// 									{mint.owner.toLowerCase() === currentAccount.toLowerCase() && 
+	// 										<button className="edit-button" onClick={() => editRecord(mint.name)}>
+	// 											<img className="edit-icon" src="https://img.icons8.com/metro/26/000000/pencil.png" alt="Edit button" />
+	// 										</button>
+	// 									} */}
+	// 								</div>
+	// 								<p>{mint.record}</p>
+	// 							</div>
+	// 						)
+	// 					})}
+	// 				</div>
+	// 				: 
+	// 				<div className="">
+	// 					Nothing Minted	
+	// 				</div>
+	// 				} 
+	// 			</div>
+	// 		)
+		
+	// }
 	
 
 	
@@ -61,8 +101,7 @@ const Dashboard = () => {
 				</div>
 			</div>
 			{selected === 1 && 
-				<div className=" w-full h-screen flex flex-col justify-center items-center">
-					
+				<div className=" w-full h-screen  p-8">
 					{renderMints()}
 				</div>
 			}
@@ -71,7 +110,7 @@ const Dashboard = () => {
 					<h4>Your address:</h4>
 					<div>{currentAccount}</div>
 					<div>
-						{mints && renderInputForm()}
+						{renderInputForm()}
 					</div>
 				</div>
 			}	

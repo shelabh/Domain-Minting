@@ -19,6 +19,8 @@ const main = async () => {
       
 	const balance = await hre.ethers.provider.getBalance(domainContract.address);
 	console.log("Contract balance:", hre.ethers.utils.formatEther(balance));
+
+	
       };
       
       const runMain = async () => {

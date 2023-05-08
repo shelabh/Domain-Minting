@@ -8,6 +8,7 @@ import { collection, addDoc, getDocs } from 'firebase/firestore';
 const dbInstance = collection(database, 'users');
 const { ethereum } = typeof window !== "undefined" ? window : {};
 export const AppContext = createContext();
+const TOP_LEVEL_DOMAIN = '.lagos'
 
 const AppProvider = ({ children }) => {
 	const [currentAccount, setCurrentAccount] = useState('')
@@ -99,7 +100,7 @@ const AppProvider = ({ children }) => {
 			return
 		}
 		// Calculate price based on length of domain (change this to match your contract)	
-		// 3 chars = 0.5 MATIC, 4 chars = 0.3 MATIC, 5 or more = 0.1 MATIC
+		// 3 chars = 0.5 ETH, 4 chars = 0.3 ETH, 5 or more = 0.1 ETH
 		const price = domain.length === 3 ? '0.5' : domain.length === 4 ? '0.3' : '0.1'
 		console.log("Minting domain", domain, "with price", price)
 
@@ -146,11 +147,10 @@ const AppProvider = ({ children }) => {
 
 	const fetchMints = async () => {
 		try {
-
 			if(ethereum) {
 				const provider = new ethers.providers.Web3Provider(ethereum)
 				const signer = provider.getSigner()
-				const contractAddress = " 0x807693170612eB7C37b9A5A543eA1f4865a6F259"
+				const contractAddress = "0x807693170612eB7C37b9A5A543eA1f4865a6F259"
 				const contract = new ethers.Contract(contractAddress, contractABI.abi, signer)
 
 				// Get all domain names from our contract
@@ -161,7 +161,7 @@ const AppProvider = ({ children }) => {
 				const mintRecords = await Promise.all(names.map(async name => {
 
 					// const mintRecord = await contract.records(name)
-					const owner = await contract.domains(name) ? contract.domains(name) : null;
+					const owner = await contract.domains(name);
 
 					return {
 						id: names.indexOf(name),
@@ -180,36 +180,41 @@ const AppProvider = ({ children }) => {
 		}
 	}
 	const renderMints = () => {
-		const contractAddress = " 0x807693170612eB7C37b9A5A543eA1f4865a6F259"
-		if(currentAccount && mints.length > 0) {
+		const contractAddress = "0x807693170612eB7C37b9A5A543eA1f4865a6F259"
 			return (
-				<div className='mint-container'>
-					<p className='subtitle'>Recently minted domains!</p>
-					<div className='mint-list'>
-						{mints.map((mint, index) => {
-							return (
-								<div className='mint-item' key={index}>
-									<div className='mint-row'>
-										<a className='link' href={`https://testnets.opensea.io/assets/mumbai/${contractAddress}/${mint.id}`} target="_blank" rel="noopener noreferrer">
-											<p className='underlined'>{' '}{mint.name}{TOP_LEVEL_DOMAIN}{' '}</p>
-										</a>
-										{/* If mint.owner is currentAccount, add an edit button */}
-										{mint.owner.toLowerCase() === currentAccount.toLowerCase() && 
-											<button className="edit-button" onClick={() => editRecord(mint.name)}>
-												<img className="edit-icon" src="https://img.icons8.com/metro/26/000000/pencil.png" alt="Edit button" />
-											</button>
-										}
+				<div className='flex flex-col justify-between gap-10'>
+					<p className='text-4xl font-bold'>
+						Recently minted domains
+	 				</p>
+					{currentAccount && mints.length > 0 ?
+						<div className='mint-list'>
+							{mints.map((mint, index) => {
+								return (
+									<div className='mint-item' key={index}>
+										<div className='mint-row'>
+											<a className='link' href={`https://testnets.opensea.io/assets/mumbai/${contractAddress}/${mint.id}`} target="_blank" rel="noopener noreferrer">
+												<p className='underlined'>{' '}{mint.name}{TOP_LEVEL_DOMAIN}{' '}</p>
+											</a>
+											{/* If mint.owner is currentAccount, add an edit button */}
+											{mint.owner.toLowerCase() === currentAccount.toLowerCase() && 
+												<button className="edit-button" onClick={() => editRecord(mint.name)}>
+													<img className="edit-icon" src="https://img.icons8.com/metro/26/000000/pencil.png" alt="Edit button" />
+												</button>
+											}
+										</div>
+										<p>{mint.record}</p>
 									</div>
-									<p>{mint.record}</p>
-								</div>
-							)
-						})}
-					</div>
+								)
+							})}
+						</div>
+						:
+						<div>
+							Nothing Minted
+						</div>
+					}
 				</div>
 			)
-		}
 	}
-
 
   	useEffect(() => {
 		checkIfWalletIsConnected();
